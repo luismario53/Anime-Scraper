@@ -37,7 +37,7 @@ const scrapeCapitulos = async (url) => {
   await scrapingImages(listaTotal.flat())
 }
 
-const scrapeWebsite = async (browser, url)  {
+const scrapeWebsite = async (browser, url) => {
   const page = await browser.newPage()
 
   await page.goto(url, { waitUntil: 'networkidle2' })

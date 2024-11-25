@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abrir Imágenes y Descargar</title>
+</head>
+<body>
+    <input type="file" id="fileInput" accept=".txt">
+    <script>
+        // Función para leer el archivo .txt seleccionado
+        function readFile(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const text = reader.result;
+                    const urls = text.split('\n').map(url => url.trim()).filter(url => url);
+                    resolve(urls);
+                };
+                reader.onerror = reject;
+                reader.readAsText(file);
+            });
+        }
+
+        // Manejar la selección del archivo
+        document.getElementById('fileInput').addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                readFile(file).then(imageUrls => {
+                    if (imageUrls.length > 0) {
+                        fetch('http://localhost:3000/download-images', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ urls: imageUrls })
+                        }).then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                alert('Descarga Completa!')
+                                console.log('Todas las imágenes se han descargado correctamente.');
+                            } else {
+                                console.error('Error al descargar las imágenes:', data.message);
+                            }
+                        }).catch(err => console.error('Error al enviar las URLs:', err));
+                    } else {
+                        console.error('No se encontraron URLs en el archivo.');
+                    }
+                }).catch(err => console.error('Error al leer el archivo de URLs:', err));
+            } else {
+                console.error('No se ha seleccionado ningún archivo.');
+            }
+        });
+    </script>
+</body>
+</html>

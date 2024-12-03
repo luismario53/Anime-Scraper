@@ -4,8 +4,8 @@ const cheerio = require('cheerio')
 const axios = require('axios');
 
 const scrapingUrl = 'https://mto.to/chapter'
-const firstPage = '856124'
-let ANIME = 'Saint Young Men'
+const firstPage = '1577658'
+let ANIME = 'Weathering With You'
 
 const scrapeCapitulos = async (url) => {
   // const browser = await puppeteer.launch()
@@ -60,21 +60,22 @@ const scrapeWebsite = async (browser, url) => {
 const scrapingImages = async (listaUrls) => {
 
   const anime = ANIME.replace(".", "_");
+  console.log(listaUrls)
 
-  try {
+  // try {
 
-    await axios.post('http://localhost:3000/download-images',
-      { urls: listaUrls, anime: anime },
-      { headers: 
-        { 'Content-Type': 'application/json '}
-      }
-    );
+  //   await axios.post('http://localhost:3000/download-images',
+  //     { urls: listaUrls, anime: anime },
+  //     { headers: 
+  //       { 'Content-Type': 'application/json '}
+  //     }
+  //   );
 
-    console.log('Descarga Completa!')
+  //   console.log('Descarga Completa!')
 
-  } catch (err) {
-    console.error('Error al enviar las URLs:', err);
-  }
+  // } catch (err) {
+  //   console.error('Error al enviar las URLs:', err);
+  // }
 
 }
 
